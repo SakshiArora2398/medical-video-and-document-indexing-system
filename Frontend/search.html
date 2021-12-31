@@ -5,14 +5,38 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     <!---<link href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" rel="stylesheet" />--->
 </head>
-<body>
+<body id="body">
     <div class="container">
         <div class="row height d-flex justify-content-center align-items-center">
             <div class="col-md-8">
-                <div class="search"> <i class="fa fa-search"></i> <input type="text" class="form-control" placeholder="Have a question? Ask Now"> <button class="btn btn-primary">Search</button> </div>
+                <div class="search"> <i class="fa fa-search"></i> <input type="text" id="myText" class="form-control" placeholder="Looking for a document? Search here"> <button class="btn btn-primary" onclick="myFunction()">Search</button> </div>
             </div>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function myFunction() {
+    x=document.getElementById("myText").value;
+    console.log(x);
+    url='https://ykdkzg6745.execute-api.us-east-1.amazonaws.com/Test345'+'/search?q='+x;
+    fetch(url,{
+        method:'GET'
+    }).then(response => response.json())
+  .then((data) => { console.log(data["results"]);
+      for (let i = 0; i < data["results"].length; i++) {
+          console.log("hello"+data["results"][i]["url"])
+          var fig=document.createElement('figure');
+          var img = document.createElement('img');
+          var figcaption=document.createElement('figcaption');
+          img.src = data["results"][i].url;
+          figcaption.innerHTML=data["results"][i].labels;
+          fig.appendChild(img);
+          fig.appendChild(figcaption);
+          document.getElementById('body').appendChild(fig);
+  }
+    return data;  } )
+  .catch(error => console.log('Error while fetching:', error));
+  }
+    </script>
 </body>
